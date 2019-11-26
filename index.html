@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="time-display">
+      <div class="minutes">
+        <p id="min">25</p>
+      </div>
+     <div class="seconds">
+        <p id="sec">00</p>
+      </div>
+    </div>
+
+    <div class="settings">
+      <input type="number" name="nr-minutes" id="nr-minutes" value="25">
+      <input type="number" name="nr-seconds" id="nr-seconds" value="00">
+    </div>
+  
+    <button id="start" class="stopped">Start Time</button>
+    <button id="stop">Stop Time</button>
+  </div>
+
+
+  <script src="js/pomodoro.js"></script>
+</body>
+</html>
