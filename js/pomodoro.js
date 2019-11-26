@@ -22,6 +22,10 @@ const setMode = {
   started : function () {
     startButton.classList.replace('stopped', 'started');
   },
+
+  stopped : function () {
+    startButton.classList.replace('started', 'stopped');
+  },
 };
 
 
@@ -54,12 +58,16 @@ function updateMinutes () {
 }
 
 function startCountdown () {
+  if (startButton.className == 'started') {
+    return;
+  }
   countdown = setInterval(updateTime, 1000);
   setMode.started();
 }
 
 function stopCountdown () {
   clearInterval(countdown);
+  setMode.stopped();
 }
 
 startButton.addEventListener('click', startCountdown);
