@@ -7,7 +7,7 @@ const displaySeconds = document.querySelector('#sec');
 const nrMinutes = document.querySelector('#nr-minutes');
 const nrSeconds = document.querySelector('#nr-seconds');
 
-
+/* Functions and Methods */
 const update = {
   minutes : function (minutes) {
     displayMinutes.textContent = minutes;
@@ -48,13 +48,6 @@ function updateTime () {
   }
 
 
-}
-
-function updateMinutes () {
-  let minutes = Number(displayMinutes.textContent);
-
-  minutes--;
-  displayMinutes.textContent = minutes;
 }
 
 function startCountdown () {
