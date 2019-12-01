@@ -11,21 +11,32 @@
 
   <div class="container">
     <div class="time-display">
-      <div class="minutes">
-        <p id="min">25</p>
+      <div class="work-time">
+        <div class="minutes">
+          <p id="min">25</p>
+        </div>
+       <div class="seconds">
+          <p id="sec">00</p>
+        </div>
       </div>
-     <div class="seconds">
-        <p id="sec">00</p>
+      <div class="break-time">
+        <div class="breakMinutes">
+          <p id="minBreak">5</p>
+        </div>
+        <div class="breakSeconds">
+          <p id="secBreak">00</p>
+        </div>
       </div>
     </div>
 
+
     <div class="settings">
-      <input type="number" name="nr-minutes" id="nr-minutes" value="25">
-      <input type="number" name="nr-seconds" id="nr-seconds" value="00">
+      <input type="number" name="nr-work" id="nr-work" value="25">
+      <input type="number" name="nr-break" id="nr-break" value="05">
     </div>
   
-    <button id="start" class="stopped">Start Time</button>
-    <button id="stop">Stop Time</button>
+    <button id="start" class="work stopped ">Start Time</button>
+    <button id="stop" class="work">Stop Time</button>
   </div>
 
 

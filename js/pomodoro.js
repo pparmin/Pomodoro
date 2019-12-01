@@ -1,11 +1,28 @@
+/*
+What works so far? 
+Automatic switch between work time and break time
+Stop button stops both fields
+
+TODO:
+Start button should also be able to restart break (but not start)
+normal timer at the same time (introduce mode to break time?)
+  --> Introduce mode for break/work time: When work timer is running: mode "work",
+      when break timer is running: mode "break")
+*/
+
+
 /* Variable Declaration */
 let countdown;
+let countdownBreak;
 const startButton = document.querySelector('#start');
 const stopButton = document.querySelector('#stop');
 const displayMinutes = document.querySelector('#min');
 const displaySeconds = document.querySelector('#sec');
-const nrMinutes = document.querySelector('#nr-minutes');
-const nrSeconds = document.querySelector('#nr-seconds');
+const nrWorkTime = document.querySelector('#nr-work');
+const nrBreakTime = document.querySelector('#nr-break');
+const displayBreakMinutes = document.querySelector('#minBreak');
+const displayBreakSeconds = document.querySelector('#secBreak');
+
 
 /* Functions and Methods */
 const update = {
@@ -15,6 +32,24 @@ const update = {
 
   seconds : function (seconds) {
     displaySeconds.textContent = seconds;
+  },
+
+  minutesBreak : function (minutes) {
+    displayBreakMinutes.textContent = minutes;
+  },
+
+  secondsBreak : function (seconds) {
+    displayBreakSeconds.textContent = seconds;
+  },
+};
+
+const setTime = {
+  work : function (minutes) {
+    displayMinutes.textContent = minutes;
+  }, 
+
+  break : function (minutes) {
+    displayBreakMinutes.textContent = minutes;
   },
 };
 
@@ -26,14 +61,23 @@ const setMode = {
   stopped : function () {
     startButton.classList.replace('started', 'stopped');
   },
+
+  break : function () {
+    startButton.classList.replace('work', 'break');
+    stopButton.classList.replace('work', 'break');
+  },
+
+  work : function () {
+    startButton.classList.replace('break', 'work');
+    stopButton.classList.replace('break', 'work');
+  },
+
 };
 
-
-function updateTime () {
+function updateWorkTimer () {
   let seconds = Number(displaySeconds.textContent);
   let minutes = Number(displayMinutes.textContent);
 
-  console.log(`Minutes: ${minutes}`);
   seconds--;
   update.seconds(seconds);
 
@@ -47,31 +91,92 @@ function updateTime () {
     displaySeconds.textContent = `0${seconds}`;
   }
 
+  if (minutes == 0 && seconds == 0) {
+    stopWorkTimer();
+    setMode.break();
+    startBreakTimer();
+  }
 
+  console.log(`Minutes: ${minutes}`);
+  console.log(`Seconds: ${seconds}`);
 }
 
-function startCountdown () {
-  if (startButton.className == 'started') {
+function updateBreakTimer () {
+  let secondsBreak = Number(displayBreakSeconds.textContent);
+  let minutesBreak = Number(displayBreakMinutes.textContent);
+
+  secondsBreak--;
+  update.secondsBreak(secondsBreak);
+
+  if (secondsBreak < 0) {
+    secondsBreak = 59;
+    update.secondsBreak(secondsBreak);
+
+    minutesBreak--;
+    update.minutesBreak(minutesBreak);
+  } else if (secondsBreak < 10) {
+    displayBreakSeconds.textContent = `0${secondsBreak}`;
+  }
+
+  console.log(`Minutes break: ${minutesBreak}`);
+  console.log(`Seconds break: ${secondsBreak}`);
+
+  if (minutesBreak == 0 && secondsBreak == 0) {
+    stopBreakTimer();
+    setMode.work();
+    startWorkTimer();
+  }
+}
+
+function startBreakTimer () {
+  if (startButton.classList.contains('started')) {
+    return;
+  } else if (startButton.classList.contains('work')) {
+    console.log('We are in work mode');
     return;
   }
-  countdown = setInterval(updateTime, 1000);
+
+  countdownBreak = setInterval(updateBreakTimer, 1000);
   setMode.started();
 }
 
-function stopCountdown () {
+function stopBreakTimer () {
+  clearInterval(countdownBreak);
+}
+
+function startWorkTimer () {
+  if (startButton.classList.contains('started')) {
+    console.log('The timer has been started already')
+    return;
+  } else if (startButton.classList.contains('break')) {
+    return;
+  }
+  countdown = setInterval(updateWorkTimer, 1000);
+  setMode.started();
+}
+
+function stopWorkTimer () {
   clearInterval(countdown);
   setMode.stopped();
 }
 
-startButton.addEventListener('click', startCountdown);
-stopButton.addEventListener('click', stopCountdown);
+/* ------------------------------------------------ */
 
-nrMinutes.addEventListener('click', e => {
-  update.minutes(e.target.value);
+startButton.addEventListener('click', (event) => {
+  startBreakTimer();
+  startWorkTimer();
+});
+stopButton.addEventListener('click', () => {
+  stopWorkTimer();
+  stopBreakTimer();
+});
+
+nrWorkTime.addEventListener('click', e => {
+  setTime.work(e.target.value);
   console.log(e.target.value);
 });
 
-nrSeconds.addEventListener('click', e => {
-  update.seconds(e.target.value);
+nrBreakTime.addEventListener('click', e => {
+  setTime.break(e.target.value);
   console.log(e.target.value);
 });
