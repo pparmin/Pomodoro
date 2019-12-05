@@ -8,20 +8,27 @@ Start button should also be able to restart break (but not start)
 normal timer at the same time (introduce mode to break time?)
   --> Introduce mode for break/work time: When work timer is running: mode "work",
       when break timer is running: mode "break")
+
+
+Introduce proper classes/modes for new structure
 */
 
 
 /* Variable Declaration */
 let countdown;
 let countdownBreak;
-const startButton = document.querySelector('#start');
-const stopButton = document.querySelector('#stop');
+const startButton = document.querySelector('#play');
+//const stopButton = document.querySelector('#stop');
 const displayMinutes = document.querySelector('#min');
 const displaySeconds = document.querySelector('#sec');
 const nrWorkTime = document.querySelector('#nr-work');
 const nrBreakTime = document.querySelector('#nr-break');
-const displayBreakMinutes = document.querySelector('#minBreak');
-const displayBreakSeconds = document.querySelector('#secBreak');
+const displayBreakMinutes = document.querySelector('#break-min');
+const displayBreakSeconds = document.querySelector('#break-sec');
+
+const playButton = document.querySelector('#play');
+const stopButton = document.querySelector('#stop');
+const resetButton = document.querySelector('#reset');
 
 
 /* Functions and Methods */
@@ -43,6 +50,7 @@ const update = {
   },
 };
 
+
 const setTime = {
   work : function (minutes) {
     displayMinutes.textContent = minutes;
@@ -51,6 +59,14 @@ const setTime = {
   break : function (minutes) {
     displayBreakMinutes.textContent = minutes;
   },
+
+  fullValue : function (minutes) {
+    displayMinutes.textContent = minutes;
+  },
+
+  fullValueBreak : function (minutes) {
+    displayBreakMinutes.textContent = minutes;
+  }
 };
 
 const setMode = {
@@ -129,6 +145,8 @@ function updateBreakTimer () {
 }
 
 function startBreakTimer () {
+
+  // if timer is already running, don't execute function
   if (startButton.classList.contains('started')) {
     return;
   } else if (startButton.classList.contains('work')) {
@@ -145,6 +163,8 @@ function stopBreakTimer () {
 }
 
 function startWorkTimer () {
+
+  // if timer is already running, don't execute function
   if (startButton.classList.contains('started')) {
     console.log('The timer has been started already')
     return;
@@ -166,6 +186,7 @@ startButton.addEventListener('click', (event) => {
   startBreakTimer();
   startWorkTimer();
 });
+
 stopButton.addEventListener('click', () => {
   stopWorkTimer();
   stopBreakTimer();
