@@ -7,7 +7,7 @@ TODO:
 Start button should also be able to restart break (but not start)
 normal timer at the same time (introduce mode to break time?)
   --> Introduce mode for break/work time: When work timer is running: mode "work",
-      when break timer is running: mode "break")
+      when break timer is running: mode "break")  
 
 
 Introduce proper classes/modes for new structure
@@ -18,18 +18,21 @@ Introduce proper classes/modes for new structure
 let countdown;
 let countdownBreak;
 const startButton = document.querySelector('#play');
-//const stopButton = document.querySelector('#stop');
+const stopButton = document.querySelector('#stop');
+const resetButton = document.querySelector('#reset');
+
 const displayMinutes = document.querySelector('#min');
 const displaySeconds = document.querySelector('#sec');
 const nrWorkTime = document.querySelector('#nr-work');
 const nrBreakTime = document.querySelector('#nr-break');
 const displayBreakMinutes = document.querySelector('#break-min');
 const displayBreakSeconds = document.querySelector('#break-sec');
-
-const playButton = document.querySelector('#play');
-const stopButton = document.querySelector('#stop');
-const resetButton = document.querySelector('#reset');
-
+const colonWork = document.querySelector('#colon-work');
+const colonBreak = document.querySelector('#colon-break');
+const increaseButtons = document.querySelectorAll('#increase');
+const decreaseButtons = document.querySelectorAll('#decrease');
+const sessionTimeSettings = document.querySelector('#set-session');
+const breakTimeSettings = document.querySelector('#set-break');
 
 /* Functions and Methods */
 const update = {
@@ -60,12 +63,9 @@ const setTime = {
     displayBreakMinutes.textContent = minutes;
   },
 
-  fullValue : function (minutes) {
-    displayMinutes.textContent = minutes;
-  },
-
-  fullValueBreak : function (minutes) {
-    displayBreakMinutes.textContent = minutes;
+  seconds : function (seconds) {
+    displaySeconds.textContent = `${seconds}0`;
+    displayBreakSeconds.textContent = `${seconds}0`;
   }
 };
 
@@ -90,6 +90,94 @@ const setMode = {
 
 };
 
+const setColors = {
+  work : function () {
+    displayMinutes.style.color = 'rgb(194, 129, 129)';
+    displaySeconds.style.color = 'rgb(194, 129, 129)';
+    colonWork.style.color = 'rgb(194, 129, 129)';
+  },
+
+  break : function () {
+    displayBreakMinutes.style.color = 'rgb(194, 129, 129)';
+    displayBreakSeconds.style.color = 'rgb(194, 129, 129)';
+    colonBreak.style.color = 'rgb(194, 129, 129)';
+  },
+
+  workPaused : function () {
+    displayMinutes.style.color = 'rgb(194, 129, 129)';
+    displaySeconds.style.color = 'rgb(194, 129, 129)';
+    colonWork.style.color = 'rgb(194, 129, 129)';
+  }, 
+
+  breakPaused : function () {
+    displayBreakMinutes.style.color = 'rgb(194, 129, 129)';
+    displayBreakSeconds.style.color = 'rgb(194, 129, 129)';
+    colonBreak.style.color = 'rgb(194, 129, 129)';
+  }
+};
+
+const removeColors = {
+  work : function () {
+    displayMinutes.style.color = 'rgb(34, 34, 34)';
+    displaySeconds.style.color = 'rgb(34, 34, 34)';
+    colonWork.style.color = 'rgb(34, 34, 34)';
+  },
+
+  break : function () {
+    displayBreakMinutes.style.color = 'rgb(34, 34, 34)';
+    displayBreakSeconds.style.color = 'rgb(34, 34, 34)';
+    colonBreak.style.color = 'rgb(34, 34, 34)';
+  }
+};
+
+const increaseInitialTime = {
+  work : function () {
+    let currentNumber = Number(sessionTimeSettings.textContent);
+    console.log('old number: ' + currentNumber);
+    currentNumber += 1;
+    console.log('New cNumber: ' + currentNumber);
+    sessionTimeSettings.textContent = currentNumber;
+    displayMinutes.textContent = currentNumber;
+  },
+
+  break : function () {
+    let currentNumber = Number(breakTimeSettings.textContent);
+    console.log('old number: ' + currentNumber);
+    currentNumber += 1;
+    console.log('New cNumber: ' + currentNumber);
+    breakTimeSettings.textContent = currentNumber;
+    displayBreakMinutes.textContent = currentNumber;
+  }
+};
+
+const decreaseInitialTime = {
+  work : function () {
+
+    let currentNumber = Number(sessionTimeSettings.textContent);
+    console.log('old number: ' + currentNumber);
+    currentNumber -= 1;
+    console.log('New cNumber: ' + currentNumber);
+    if (currentNumber <= 0) {
+      return;
+    }
+    sessionTimeSettings.textContent = currentNumber;
+    displayMinutes.textContent = currentNumber;
+  },
+
+  break : function () {
+    let currentNumber = Number(breakTimeSettings.textContent);
+    console.log('old number: ' + currentNumber);
+    currentNumber -= 1;
+    console.log('New cNumber: ' + currentNumber);
+    if (currentNumber <= 0) {
+      return;
+    }
+
+    breakTimeSettings.textContent = currentNumber;
+    displayBreakMinutes.textContent = currentNumber;
+  }
+};
+
 function updateWorkTimer () {
   let seconds = Number(displaySeconds.textContent);
   let minutes = Number(displayMinutes.textContent);
@@ -107,9 +195,14 @@ function updateWorkTimer () {
     displaySeconds.textContent = `0${seconds}`;
   }
 
-  if (minutes == 0 && seconds == 0) {
+  // when the timer has run out, switch to break timer/mode
+  if (minutes <= 0 && seconds <= 0) {
     stopWorkTimer();
+    alert("It's time to take a break");
     setMode.break();
+
+    // set the display for the session time back to the initial time
+    setTime.work(sessionTimeSettings.textContent);
     startBreakTimer();
   }
 
@@ -117,6 +210,7 @@ function updateWorkTimer () {
   console.log(`Seconds: ${seconds}`);
 }
 
+// This function regulates the simulation of a second long countdown
 function updateBreakTimer () {
   let secondsBreak = Number(displayBreakSeconds.textContent);
   let minutesBreak = Number(displayBreakMinutes.textContent);
@@ -137,9 +231,14 @@ function updateBreakTimer () {
   console.log(`Minutes break: ${minutesBreak}`);
   console.log(`Seconds break: ${secondsBreak}`);
 
+  // when the timer has run out, switch to work timer/mode
   if (minutesBreak == 0 && secondsBreak == 0) {
     stopBreakTimer();
     setMode.work();
+    setMode.stopped();
+
+    // set the display for the break time back to the initial time
+    setTime.break(breakTimeSettings.textContent);
     startWorkTimer();
   }
 }
@@ -155,11 +254,13 @@ function startBreakTimer () {
   }
 
   countdownBreak = setInterval(updateBreakTimer, 1000);
+  setColors.break();
   setMode.started();
 }
 
 function stopBreakTimer () {
   clearInterval(countdownBreak);
+  removeColors.break(); 
 }
 
 function startWorkTimer () {
@@ -172,12 +273,14 @@ function startWorkTimer () {
     return;
   }
   countdown = setInterval(updateWorkTimer, 1000);
+  setColors.work();
   setMode.started();
 }
 
 function stopWorkTimer () {
   clearInterval(countdown);
   setMode.stopped();
+  removeColors.work();
 }
 
 /* ------------------------------------------------ */
@@ -192,12 +295,24 @@ stopButton.addEventListener('click', () => {
   stopBreakTimer();
 });
 
-nrWorkTime.addEventListener('click', e => {
-  setTime.work(e.target.value);
-  console.log(e.target.value);
-});
+increaseButtons.forEach(increaseButton => increaseButton.addEventListener('click', () => {
+  if (increaseButton.classList.contains('work')) {
+    increaseInitialTime.work();
+  } else if (increaseButton.classList.contains('break')) {
+    increaseInitialTime.break();
+  }
+}));
 
-nrBreakTime.addEventListener('click', e => {
-  setTime.break(e.target.value);
-  console.log(e.target.value);
+decreaseButtons.forEach(decreaseButton => decreaseButton.addEventListener('click', () => {
+  if (decreaseButton.classList.contains('work')) {
+    decreaseInitialTime.work();
+  } else if (decreaseButton.classList.contains('break')) {
+    decreaseInitialTime.break();
+  }
+}));
+
+resetButton.addEventListener('click', () => {
+  setTime.work(25);
+  setTime.break(5);
+  setTime.seconds(0);
 });
