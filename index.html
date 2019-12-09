@@ -15,41 +15,40 @@
 <body>
 
   <div class="container-wrapper">
+    <p id="lettering">Pomodoro Clock</p>
     <div class="container">
       <div id="session-settings">
         <p class="header">Session</p>
-        <i class="material-icons">keyboard_arrow_down</i>
-        <p class="time-settings">25</p>
-        <i class="material-icons">keyboard_arrow_up</i>
+        <i id="decrease" class="work session material-icons">keyboard_arrow_down</i>
+        <p id="set-session">25</p>
+        <i id="increase" class="work session material-icons">keyboard_arrow_up</i>
       </div>
 
       <div id="time">
         <p id="min">25</p>
-        <p id="seperator">:</p>
+        <p id="colon-work">:</p>
         <p id="sec">00</p>
       </div>
-      
+
       <div id="break-time">
         <p id="break-min">5</p>
-        <p id="separator">:</p>
+        <p id="colon-break">:</p>
         <p id="break-sec">00</p>
       </div>
 
       <div id="break-settings">
-        <div id="break-min">
-          <p class="header">Break</p>
-          <i class="material-icons">keyboard_arrow_down</i>
-          <p class="time-settings">5</p>
-          <i class="material-icons">keyboard_arrow_up</i>
-        </div>
+        <p class="header">Break</p>
+        <i id="decrease" class="break material-icons">keyboard_arrow_down</i>
+        <p id="set-break">5</p>
+        <i id="increase" class="break material-icons">keyboard_arrow_up</i>
       </div>
 
       <div class="settings-container">
-        <p id="play">
+        <p id="play" class="work stopped">
           <i class="material-icons">play_arrow</i>
         </p>
 
-        <p id="stop">
+        <p id="stop" class="work">
           <i class="material-icons">stop</i>
         </p>
 
