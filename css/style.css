@@ -13,7 +13,7 @@ body {
 }
 
 #lettering {
-  color: rgb(194, 129, 129);
+  color: rgb(224, 152, 152);
   font-family: 'Roboto Slab';
   font-size: 32px;
   margin-top: 64px;
@@ -35,7 +35,7 @@ body {
 
 .header {
   font-size: 18px;
-  color: rgb(185, 172, 110);
+  color: rgb(241, 217, 92);
 }
 
 .time-settings {
@@ -46,19 +46,39 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   
   grid-row: 1 / span 2;
   grid-column: 1 / span 1;
 
-  text-align: center;
+}
+
+#increase {
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+}
+
+#increase:hover {
+  color: rgb(241, 217, 92);
+}
+
+#decrease {
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+}
+
+#decrease:hover {
+  color: rgb(241, 217, 92);
 }
 
 #set-session {
-  color: rgb(185, 172, 110);
+  color: rgb(241, 217, 92);
 }
 
 #set-break {
-  color: rgb(185, 172, 110);
+  color: rgb(241, 217, 92);
 }
 
 #session-settings p, i {
@@ -89,11 +109,10 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   
   grid-row: 1 / span 2;
   grid-column: 4 / span 1;
-
-  text-align: center;
 }
 
 #break-settings p, i {
@@ -109,7 +128,7 @@ body {
   flex-direction: row;
   justify-content: space-around;
   text-align: center;
-  background-color: rgb(194, 129, 129);
+  background-color: rgb(224, 152, 152);
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 }
